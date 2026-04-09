@@ -1,9 +1,9 @@
-# 🤚 Hand Gesture Recognition
+# Hand Gesture Recognition
 
-👉 **[Try the Live Web Demo!](https://aaryandiwan.github.io/Hand-Gesture-Recognition/web/)** (Runs entirely in your browser)
 
-A complete, end-to-end hand gesture recognition pipeline in Python and JavaScript. Collect labelled gesture data through your webcam, train a classifier, and run real-time inference.
+**[Live DEMO!](https://aaryandiwan.github.io/Hand-Gesture-Recognition/web/)** 
 
+A complete, end-to-end hand gesture recognition pipeline in Python
 | Component | Tech |
 |---|---|
 | Hand landmark detection | MediaPipe (21 landmarks, x/y/z) |
@@ -14,7 +14,7 @@ A complete, end-to-end hand gesture recognition pipeline in Python and JavaScrip
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 hand_gesture_project/
@@ -30,26 +30,26 @@ hand_gesture_project/
 
 ---
 
-## 🚀 Setup
+## Setup
 
 ```bash
-# 1. Clone / copy this folder
+ Clone / copy this folder
 cd hand_gesture_project
 
-# 2. (Recommended) Create a virtual environment
+Create a virtual environment
 python -m venv venv
 # Windows
 venv\Scripts\activate
 # macOS / Linux
 source venv/bin/activate
 
-# 3. Install dependencies
+Install dependencies
 pip install -r requirements.txt
 ```
 
 ---
 
-## 📸 Step 1 — Collect Data
+## Step 1 — Collect Data
 
 ```bash
 python data_collection.py
@@ -62,11 +62,9 @@ python data_collection.py
 - **Press `q`** to quit.
 - Samples are appended to `dataset/gesture_data.csv`.
 
-> **Tip:** Collect at least **50–100 samples per class** from different angles and distances for good accuracy.
-
 ---
 
-## 🧠 Step 2 — Train the Model
+## Step 2 — Train the Model
 
 ```bash
 python train_model.py
@@ -80,7 +78,7 @@ python train_model.py
 
 ---
 
-## 🎥 Step 3 — Real-Time Inference
+## Step 3 — Real-Time Inference
 
 ```bash
 python inference.py
@@ -93,7 +91,7 @@ python inference.py
 
 ---
 
-## ➕ Adding More Gesture Classes
+## Adding More Gesture Classes
 
 1. **Define your new gesture** (e.g., "thumbs up" = class `5`).
 2. Run `data_collection.py` and press the corresponding digit key while performing the gesture.
@@ -104,8 +102,7 @@ python inference.py
 You can use classes `0` through `9` for up to **10 gesture types**.
 
 ---
-
-## 🛡️ Edge-Case Handling
+## Edge-Case Handling
 
 | Scenario | Behaviour |
 |---|---|
@@ -116,7 +113,7 @@ You can use classes `0` through `9` for up to **10 gesture types**.
 
 ---
 
-## 📐 Feature Vector (73 elements)
+##  Feature Vector (73 elements)
 
 | Slice | Count | Description |
 |---|---|---|
