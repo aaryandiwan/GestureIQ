@@ -1,7 +1,7 @@
-# Hand Gesture Recognition
+# GestureIQ
 
 
-**[Live DEMO!](https://aaryandiwan.github.io/Hand-Gesture-Recognition/web/)** 
+**[Live DEMO!](https://aaryandiwan.github.io/GestureIQ/web/)** 
 
 A complete, end-to-end hand gesture recognition pipeline in Python
 | Component | Tech |
