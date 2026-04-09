@@ -1,5 +1,5 @@
 """
-utils.py — Feature extraction utilities for hand gesture recognition.
+utils.py — Feature extraction utilities for GestureIQ.
 
 This module provides functions to convert raw MediaPipe hand landmarks
 into a normalised, augmented feature vector suitable for classification.

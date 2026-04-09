@@ -1,7 +1,6 @@
-# GestureIQ
+# 🤚 GestureIQ
 
-
-**[Live DEMO!](https://aaryandiwan.github.io/GestureIQ/web/)** 
+👉 **[Try the Live Web Demo!](https://aaryandiwan.github.io/GestureIQ/web/)** (Runs entirely in your browser)
 
 A complete, end-to-end hand gesture recognition pipeline in Python
 | Component | Tech |
@@ -17,7 +16,7 @@ A complete, end-to-end hand gesture recognition pipeline in Python
 ## Project Structure
 
 ```
-hand_gesture_project/
+GestureIQ/
 ├── data_collection.py   # Step 1 — collect labelled gesture samples
 ├── train_model.py       # Step 2 — train the classifier
 ├── inference.py         # Step 3 — real-time webcam predictions

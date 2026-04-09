@@ -1,5 +1,5 @@
 /**
- * app.js — Browser-based hand gesture recognition
+ * app.js — GestureIQ: Browser-based hand gesture recognition
  *
  * Uses MediaPipe Hands for landmark detection and a simple
  * K-Nearest Neighbours (KNN) classifier for gesture recognition.
@@ -45,6 +45,17 @@ let modelTrained = false;
 const trainingData = {};
 // Counts per class
 const sampleCounts = {};
+
+// Community data (loaded from server)
+const communityData = {};
+let communityTotal = 0;
+let communityLoaded = false;
+
+// Batch buffer for sending samples to server
+const pendingUploads = {};  // { classId: [features, ...] }
+let uploadTimer = null;
+const BATCH_SIZE = 10;      // Send after collecting this many
+const BATCH_INTERVAL = 3000; // Or send after this many ms
 
 // FPS tracking
 let prevTime = performance.now();
@@ -231,6 +242,9 @@ function onResults(results) {
       updateSampleCountsUI();
       updateGestureButtons();
 
+      // Queue for server upload
+      queueSampleForUpload(activeClass, features);
+
       // Flash effect
       flashEl.classList.add("active");
       setTimeout(() => flashEl.classList.remove("active"), 80);
@@ -282,12 +296,13 @@ async function toggleCamera() {
   predictionEl.textContent = "Starting camera...";
 
   try {
+    const isMobile = window.innerWidth <= 768;
     camera = new Camera(videoEl, {
       onFrame: async () => {
         await hands.send({ image: videoEl });
       },
-      width: 1280,
-      height: 960,
+      width: isMobile ? 640 : 1280,
+      height: isMobile ? 480 : 960,
     });
     await camera.start();
     cameraRunning = true;
@@ -385,9 +400,11 @@ function updateSampleCountsUI() {
   const total = Object.values(sampleCounts).reduce((a, b) => a + b, 0);
   const classes = Object.keys(sampleCounts).length;
 
-  container.innerHTML = `
-    <span class="count-label">Total:</span> ${total} samples across ${classes} classes
-  `;
+  let html = `<span class="count-label">Your samples:</span> ${total} across ${classes} classes`;
+  if (communityLoaded) {
+    html += `<br><span class="count-label">🌐 Community:</span> ${communityTotal} samples shared by all users`;
+  }
+  container.innerHTML = html;
 }
 
 // ── Training ───────────────────────────────────────────────────────
@@ -460,7 +477,114 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+// ── Community data: server communication ────────────────────────────
+
+/**
+ * Queue a sample for batched upload to the server.
+ */
+function queueSampleForUpload(classId, features) {
+  if (!pendingUploads[classId]) pendingUploads[classId] = [];
+  pendingUploads[classId].push(features);
+
+  // Send immediately if batch is full
+  if (pendingUploads[classId].length >= BATCH_SIZE) {
+    flushUploads(classId);
+  } else {
+    // Otherwise, set a timer to send soon
+    clearTimeout(uploadTimer);
+    uploadTimer = setTimeout(() => flushAllUploads(), BATCH_INTERVAL);
+  }
+}
+
+/**
+ * Flush pending uploads for a specific class to the server.
+ */
+async function flushUploads(classId) {
+  const batch = pendingUploads[classId];
+  if (!batch || batch.length === 0) return;
+
+  // Clear the buffer immediately
+  pendingUploads[classId] = [];
+
+  try {
+    await fetch("/api/samples", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        classId: parseInt(classId),
+        gestureName: GESTURE_NAMES[classId] || `Class ${classId}`,
+        features: batch,
+      }),
+    });
+  } catch (err) {
+    // Silently fail — offline usage should still work
+    console.warn("Could not upload samples to server:", err.message);
+  }
+}
+
+/**
+ * Flush all pending uploads across all classes.
+ */
+function flushAllUploads() {
+  for (const classId in pendingUploads) {
+    flushUploads(classId);
+  }
+}
+
+/**
+ * Load community-collected data from the server and merge into trainingData.
+ */
+async function loadCommunityData() {
+  try {
+    const response = await fetch("/api/samples");
+    if (!response.ok) return;
+
+    const result = await response.json();
+    const data = result.data || {};
+    communityTotal = result.total || 0;
+
+    // Merge community data into training data
+    for (const [classId, samples] of Object.entries(data)) {
+      const cid = parseInt(classId);
+      if (!trainingData[cid]) trainingData[cid] = [];
+      if (!communityData[cid]) communityData[cid] = [];
+
+      communityData[cid] = samples;
+      trainingData[cid].push(...samples);
+      sampleCounts[cid] = trainingData[cid].length;
+    }
+
+    communityLoaded = true;
+
+    // Auto-mark as trained if we have enough community data
+    const classCount = Object.keys(trainingData).length;
+    const totalSamples = Object.values(trainingData).reduce(
+      (sum, arr) => sum + arr.length, 0
+    );
+    if (classCount >= 2 && totalSamples >= 10) {
+      modelTrained = true;
+      const statusEl = document.getElementById("model-status");
+      statusEl.innerHTML = `
+        <span class="status-dot green"></span>
+        Community model ready — ${totalSamples} samples, ${classCount} classes
+      `;
+    }
+
+    updateGestureButtons();
+    updateSampleCountsUI();
+    console.log(`Loaded ${communityTotal} community samples`);
+  } catch (err) {
+    console.warn("Could not load community data:", err.message);
+  }
+}
+
+// Flush remaining samples before user leaves
+window.addEventListener("beforeunload", () => {
+  flushAllUploads();
+});
+
 // ── Init ───────────────────────────────────────────────────────────
 
 initGestureButtons();
 updateSampleCountsUI();
+loadCommunityData();

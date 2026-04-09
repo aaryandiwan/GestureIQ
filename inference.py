@@ -1,5 +1,5 @@
 """
-inference.py — Real-time hand gesture recognition via webcam.
+inference.py — GestureIQ: Real-time hand gesture recognition via webcam.
 
 Usage
 -----
@@ -65,7 +65,7 @@ def main() -> None:
     print("[INFO] Webcam opened. Press 'q' to quit.")
 
     # ── Set window to fullscreen ─────────────────────────────────────
-    window_name = "Hand Gesture Recognition"
+    window_name = "GestureIQ"
     cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
     cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 

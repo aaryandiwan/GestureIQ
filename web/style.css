@@ -74,6 +74,8 @@ body {
   grid-template-columns: 1fr 380px;
   gap: 24px;
   flex: 1;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 @media (max-width: 900px) {
@@ -424,4 +426,290 @@ body {
 
 .panel {
   animation: slideIn 0.3s ease-out;
+}
+
+/* ── Mobile Responsive ──────────────────────────────────────────── */
+
+/* Tablet & small laptops */
+@media (max-width: 900px) {
+  .app {
+    padding: 16px 14px;
+  }
+
+  .header {
+    padding: 14px 0 20px;
+  }
+
+  .header h1 {
+    font-size: 1.7rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+  }
+
+  .main {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .video-container {
+    aspect-ratio: 4 / 3;
+    max-height: 55vh;
+  }
+
+  .prediction {
+    font-size: 1.3rem;
+  }
+
+  .controls-panel {
+    gap: 12px;
+  }
+
+  .panel {
+    padding: 16px;
+  }
+
+  .footer {
+    padding: 16px 0 8px;
+  }
+}
+
+/* Phones */
+@media (max-width: 600px) {
+  .app {
+    padding: 10px 10px;
+    min-height: 100dvh;
+  }
+
+  .header {
+    padding: 10px 0 14px;
+  }
+
+  .header h1 {
+    font-size: 1.35rem;
+    letter-spacing: -0.01em;
+  }
+
+  .subtitle {
+    font-size: 0.78rem;
+    margin-top: 4px;
+  }
+
+  .main {
+    gap: 12px;
+  }
+
+  .video-container {
+    aspect-ratio: 4 / 3;
+    max-height: 45vh;
+    border-radius: var(--radius-sm);
+  }
+
+  .overlay {
+    padding: 10px;
+  }
+
+  .prediction {
+    font-size: 1.1rem;
+  }
+
+  .confidence {
+    font-size: 0.82rem;
+    margin-top: 2px;
+  }
+
+  .fps {
+    font-size: 0.72rem;
+    top: 10px;
+    right: 10px;
+    padding: 3px 7px;
+  }
+
+  /* Mode Tabs */
+  .mode-tabs {
+    padding: 3px;
+  }
+
+  .tab {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+
+  /* Buttons — larger touch targets */
+  .btn {
+    padding: 14px 16px;
+    font-size: 0.9rem;
+    border-radius: var(--radius-sm);
+    min-height: 48px;
+  }
+
+  .btn-primary:hover,
+  .btn-success:hover {
+    transform: none; /* disable hover lift on touch */
+  }
+
+  /* Panels */
+  .panel {
+    padding: 14px;
+    border-radius: var(--radius-sm);
+  }
+
+  .panel h3 {
+    font-size: 0.95rem;
+  }
+
+  .hint {
+    font-size: 0.78rem;
+    margin-bottom: 10px;
+  }
+
+  /* Gesture grid — single column on narrow phones */
+  .gesture-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .gesture-btn {
+    padding: 10px 10px;
+    font-size: 0.78rem;
+    min-height: 44px;
+    gap: 4px;
+  }
+
+  .gesture-btn .count {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    min-width: 24px;
+  }
+
+  /* Action buttons row */
+  .actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .actions .btn {
+    width: 100%;
+  }
+
+  /* Model Status */
+  .model-status {
+    padding: 12px 14px;
+    font-size: 0.82rem;
+  }
+
+  /* Sample Counts */
+  .sample-counts {
+    padding: 12px 14px;
+    font-size: 0.78rem;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Footer */
+  .footer {
+    padding: 14px 0 6px;
+    font-size: 0.75rem;
+  }
+}
+
+/* Very small phones (iPhone SE, Galaxy Fold, etc.) */
+@media (max-width: 400px) {
+  .app {
+    padding: 8px 8px;
+  }
+
+  .header h1 {
+    font-size: 1.15rem;
+  }
+
+  .subtitle {
+    font-size: 0.72rem;
+  }
+
+  .video-container {
+    max-height: 40vh;
+  }
+
+  .prediction {
+    font-size: 0.95rem;
+  }
+
+  .confidence {
+    font-size: 0.75rem;
+  }
+
+  .gesture-grid {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .gesture-btn {
+    font-size: 0.75rem;
+    padding: 9px 10px;
+  }
+
+  .tab {
+    padding: 9px 8px;
+    font-size: 0.8rem;
+  }
+
+  .btn {
+    padding: 12px 14px;
+    font-size: 0.85rem;
+  }
+}
+
+/* Landscape phones — limit video height */
+@media (max-height: 500px) and (orientation: landscape) {
+  .video-container {
+    max-height: 60vh;
+    aspect-ratio: 16 / 9;
+  }
+
+  .header {
+    padding: 6px 0 10px;
+  }
+
+  .header h1 {
+    font-size: 1.2rem;
+  }
+
+  .subtitle {
+    display: none;
+  }
+
+  .main {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .app {
+    padding: 8px 10px;
+  }
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+  .btn-primary:hover,
+  .btn-success:hover,
+  .btn-danger:hover,
+  .gesture-btn:hover {
+    transform: none;
+  }
+
+  .btn:active {
+    transform: scale(0.97);
+    transition: transform 0.1s;
+  }
+
+  .gesture-btn:active {
+    transform: scale(0.97);
+    transition: transform 0.1s;
+  }
+
+  .tab:active {
+    transform: scale(0.97);
+  }
 }
